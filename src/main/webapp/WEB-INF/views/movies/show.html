@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>Movie</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body{
+            overflow:hidden;
+            font-family:Arial;
+            text-shadow: 0px 0px 5px rgba(0,0,0,0.3);
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none; /* Safari */
+            -khtml-user-select: none; /* Konqueror HTML */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
+        }
+        .form-group {
+            display: inline-block;
+
+        }
+        #BTN_REC{
+            opacity:0.6; /*hover*/
+            color:white;
+            font-size:10px;
+            position:relative;
+            width:70px;
+            height:20px;
+            border-radius:10px;
+            background-color:rgba(100,100,100,0.9);
+            z-index:10;
+            margin-left:auto;
+            margin-right:auto;
+            text-align:center;
+            padding-top:15px;
+            top: 25px;
+        }
+
+        #BTN_REC:hover{
+            opacity:1;
+            cursor: pointer;
+        }
+
+        #BTN_Back{
+            opacity:0.6; /*hover*/
+            color:white;
+            font-size:30px;
+            position:relative;
+            width:140px;
+            height:50px;
+            border-radius:10px;
+            background-color:rgba(100,100,100,0.9);
+            z-index:10;
+            margin-left:auto;
+            margin-right:auto;
+            text-align:center;
+            padding-top:15px;
+            top:160px;
+        }
+
+        #BTN_Back:hover{
+            opacity:1;
+            cursor: pointer;
+        }
+
+
+
+        #Background img {
+            display: block;
+            width: 110%;
+            height: 110%;
+            object-fit: cover;
+        }
+        #Background{
+            position:absolute;
+            padding:0;
+            margin:0;
+            top:-10%;
+            left:0;
+            width:120%;
+            height:120%;
+
+            background-repeat:no-repeat;
+            background-size:cover;
+            background-position:center;
+            z-index:1;
+            -webkit-filter: blur(15px);
+            -moz-filter: blur(15px);
+            -o-filter: blur(15px);
+            -ms-filter: blur(15px);
+            filter: blur(15px) brightness(30%);
+            left:-10%;
+            right:-10%;
+            -webkit-box-shadow: inset 0px 0px 91px 137px rgba(0,0,0,1);
+            -moz-box-shadow: inset 0px 0px 91px 137px rgba(0,0,0,1);
+            box-shadow: inset 0px 0px 91px 137px rgba(0,0,0,1);
+        }
+
+        #SelMovie {
+            position:relative;
+            z-index:2;
+            width:820px;
+            padding:0px;
+            margin-left:auto;
+            margin-right:auto;
+            top:100px;
+            height:500px;
+            background-color:rgb(80,80,80);
+            border-radius:10px;
+            opacity:0.4;
+
+            -webkit-box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.7);
+            -moz-box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.7);
+            box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.7);
+        }
+
+
+        #ContainerHL {
+            display:block;
+            width:800px;
+            padding:0px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+        #MainPoster {
+            position:relative;
+            z-index:10;
+            top:170px;
+            left:30px;
+            float:left;
+        }
+        #Ratings {
+            position:relative;
+            z-index:10;
+            top:20px;
+            left:10px;
+        }
+
+        #Ratings table td{
+            font-size:20px;
+            width:90px;
+            height:25px;
+            color:rgb(200,200,200);
+        }
+
+
+        #TitleHL {
+            position:relative;
+            top:125px;
+            left:60px;
+            float:left;
+            overflow:hidden;
+            font-family:Arial;
+            font-size:25px;
+            font-weight:40;
+            padding-right:30px;
+            color:rgb(200,200,10);
+            z-index:10
+        }
+        .stars {
+            float:left;
+        }
+        #UserRatingHL {
+            display:block;
+            position:relative;
+            top:130px;
+            left:60px;
+            float:left;
+            overflow:hidden;
+            font-family:Arial;
+            font-size:30px;
+            font-weight:40;
+            padding-right:30px;
+            color:rgb(20,20,20);
+            z-index:10;
+            cursor:pointer;
+        }
+        #MovieInfoMain {
+            font-family:Arial;
+            position:absolute;
+            z-index:3;
+            width:500px;
+            top:30px;
+            left:270px;
+            height:450px;
+            overflow:hidden;
+        }
+
+        #DetailsTopCover {
+            position:absolute;
+            top:50px;
+            width:100%;
+            height:15px;
+            background-color:rgb(80,80,80);
+            overflow-y:scroll;
+            padding-top:10px;
+            padding-right:10px;
+            z-index:4;
+        }
+        #DetailsTop {
+            position:absolute;
+            top:50px;
+            width:100%;
+            height:20px;
+            background-color:rgb(30,30,30);
+
+            overflow-y:scroll;
+            padding-top:10px;
+            padding-right:10px;
+
+            -webkit-box-shadow: 0px 10px 10px 0px rgba(30,30,30,1);
+            -moz-box-shadow: 0px 10px 10px 0px rgba(30,30,30,1);
+            box-shadow: 0px 10px 10px 0px rgba(30,30,30,1);
+            z-index:4;
+        }
+
+        #DetailsBottom {
+            position:absolute;
+            top:395px;
+            width:100%;
+            height:10px;
+            background-color:rgb(30,30,30);
+
+            overflow-y:scroll;
+            padding-top:10px;
+            padding-right:10px;
+
+            -webkit-box-shadow: 0px -10px 10px 0px rgba(30,30,30,1);
+            -moz-box-shadow: 0px -10px 10px 0px rgba(30,30,30,1);
+            box-shadow: 0px 10px -10px 0px rgba(30,30,30,1);
+            z-index:4;
+        }
+
+        #Details {
+            position:absolute;
+            top:80px;
+            width:100%;
+            height:320px;
+            background-color:rgb(30,30,30);
+            overflow-y:scroll;
+            padding-top:10px;
+            padding-right:10px;
+        }
+
+        #Details table {
+            font-size:18px;
+            position:absolute;
+            width:350px;
+            top:5px;
+            left:20px;
+
+        }
+        #Details table tr{
+            line-height:28px;
+        }
+        #Details table .Key{
+            position:relative;
+            Color: rgb(200,200,200);
+        }
+        #Details table .Value{
+            position:relative;
+            left:0px;
+            width:230px;
+            color:white;
+        }
+
+        .flex-parent {
+            display: flex;
+        }
+
+        .jc-center {
+            justify-content: center;
+        }
+
+        button.margin-right {
+            margin-right: 20px;
+        }
+
+        button{
+            margin-top: 50px;
+            width: 100%;
+            background-color: #ffffff;
+            color: #080710;
+            padding: 15px 0;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .social{
+            margin-top: 30px;
+            display: flex;
+        }
+        .social div{
+            background: red;
+            width: 150px;
+            border-radius: 3px;
+            padding: 5px 10px 10px 5px;
+            background-color: rgba(255,255,255,0.27);
+            color: #eaf0fb;
+            text-align: center;
+        }
+        .social div:hover{
+            background-color: rgba(255,255,255,0.47);
+        }
+        .social .fb{
+            margin-left: 25px;
+        }
+        .social i{
+            margin-right: 4px;
+        }
+    </style>
+</head>
+<body>
+
+
+<!--<p th:text="${movie.getName()}">value</p>-->
+<!--<p th:text="${movie.getDescription()}">value</p>-->
+<!--<p th:text="${movie.getRating()}">value</p>-->
+
+
+<div id="ContainerHL">
+    <div id="MainPoster">
+        <img th:src="${movie.getImage()}" width=200/\ height=280/>
+        <div id="Ratings">
+            <table>
+                <tr>
+                    <td><b><span style="color:rgb(200,170,30);">IMDb:</span></b></td>
+                    <td><b th:text="${movie.getRating()}"></b><span style="color:rgb(70,70,70);"> / 10</span></td>
+                </tr>
+
+
+            </table>
+
+
+        </div>
+        <div  class="form-group" th:if="${booked == null}" style="padding-left: 15px" ><i id="BTN_REC" class="fa fa-id-card"><a th:href="@{/movies/{id}/book(id=${movie.getId()})}">Book</a></i></div>
+        <div class="form-group" th:if="${rect == null}" style="padding-left: 15px"><i id="BTN_REC" class="fa fa-heart"><a th:href="@{/movies/{id}/rec(id=${movie.getId()})}">Recommend</a></i></div>
+
+    </div>
+
+    <div id="TitleHL"><b th:text="${movie.getName()}">TAXI</b></div>
+
+</div>
+<div id="SelMovie">
+    <div id="MovieInfoMain">
+        <div id="Title"><b> </b></div>
+        <div id="UserRating"></div>
+        <div id="DetailsTop"></div>
+        <div id="DetailsTopCover"></div>
+        <div id="DetailsBottom"></div>
+        <div id="DetailsBottomCover"></div>
+        <div id="Details">
+            <table>
+                <tr><td class="Key">Description</td><td class="Value" th:text="${movie.getDescription()}" ></td></tr>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+
+    <div id="BTN_Back"><a th:href="@{/movies}">BACK</a></div>
+
+
+
+
+<div id="Background">
+    <img th:src="${movie.getImage()}"  />
+</div>
+
+<script>
+    $(document).ready(function(){
+        $("#s1").click(function(){
+            $(this).css("color", "rgba(220,180,30,1)");
+            $("#s2").css("color", "rgba(20,20,20,1)");
+            $("#s3").css("color", "rgba(20,20,20,1)");
+            $("#s4").css("color", "rgba(20,20,20,1)");
+            $("#s5").css("color", "rgba(20,20,20,1)");
+        });
+        $("#s2").click(function(){
+            $(this).css("color", "rgba(220,180,30,1)");
+            $("#s1").css("color", "rgba(220,180,30,1)");
+            $("#s3").css("color", "rgba(20,20,20,1)");
+            $("#s4").css("color", "rgba(20,20,20,1)");
+            $("#s5").css("color", "rgba(20,20,20,1)");
+        });
+        $("#s3").click(function(){
+            $(this).css("color", "rgba(220,180,30,1)");
+            $("#s1").css("color", "rgba(220,180,30,1)");
+            $("#s2").css("color", "rgba(220,180,30,1)");
+            $("#s4").css("color", "rgba(20,20,20,1)");
+            $("#s5").css("color", "rgba(20,20,20,1)");
+        });
+        $("#s4").click(function(){
+            $(this).css("color", "rgba(220,180,30,1)");
+            $("#s1").css("color", "rgba(220,180,30,1)");
+            $("#s2").css("color", "rgba(220,180,30,1)");
+            $("#s3").css("color", "rgba(220,180,30,1)");
+            $("#s5").css("color", "rgba(20,20,20,1)");
+        });
+        $("#s5").click(function(){
+            $(this).css("color", "rgba(220,180,30,1)");
+            $("#s1").css("color", "rgba(220,180,30,1)");
+            $("#s2").css("color", "rgba(220,180,30,1)");
+            $("#s3").css("color", "rgba(220,180,30,1)");
+            $("#s4").css("color", "rgba(220,180,30,1)");
+        });
+    });
+</script>
+</body>
+</html>
